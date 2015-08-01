@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>ツイ連エディタの非公認コピー</title>
+</head>
+
+<body>
+    <h1>ツイ連エディタの非公認コピー</h1>
+    <div id="editor_area">
+        <div class="textarea_wrapper">
+            <textarea name="textarea" class="textarea"></textarea>
+            <p name="char_count">140</p>
+        </div>
+        <div class="textarea_wrapper">
+            <textarea name="textarea" class="textarea"></textarea>
+            <p name="char_count">140</p>
+        </div>
+        <div id="dummy"></div>
+    </div>
+    <button id="add_textarea_button">増やす</button>
+    <hr>
+    <h2>全体的な説明</h2>
+    <p>これは<a href="http://twiren.sakura.ne.jp/" target="_blank">ツイ連エディタ</a>のアイデアの素晴らしさに惚れ込んで作った非公認・無許可コピーです。</p>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(window).load(function () {
+            $('#add_textarea_button').click(function () {
+                addTextarea();
+            });
+
+            // キー入力時文字数をカウントする
+            $('.textarea_wrapper').on('keyup', $('textarea[name=textarea]'), function () {
+                //countCharacters();
+            });
+
+
+            function addTextarea() {
+                var newTextarea = $('<textarea>')
+                    .attr('name', 'textarea')
+                    .attr('class', 'textarea');
+
+                var newP = $('<p>')
+                    .attr('name', 'char_count')
+                    .text('140');
+
+                $('<div>')
+                    .attr('class', 'textarea_wrapper')
+                    .append(newTextarea)
+                    .append(newP)
+                    .insertBefore($('#dummy'));
+            }
+
+            // テキストエリアの文字数のカウント
+            function countCharacters(textarea) {
+                //console.log(this.value.length + "/" + 140);
+                //$(this).next('p').text(140 - this.value.length);
+            }
+        });
+    </script>
+</body>
+
+</html>
