@@ -4,33 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        button {
+            border-radius: 3px;
+            text-align: center;
+            background-color: #DC6206;
+            width: 190px;
+            border: 1px solid #DC6206;
+            color: #fff;
+            opacity: .8;
+            margin-right: 0;
+            line-height: 32px;
+            cursor: pointer;
+            min-width: 56px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        
+        button:hover{
+            background-color: #FF6206;
+        }
+    </style>
     <title>ツイ連エディタの無許可クローン</title>
 </head>
 
 <body>
     <h1>ツイ連エディタの独自クローン</h1>
-    <div class="main_area">
-        <div id="editor_area" class="box"></div>
-        <div id="flat_text_area" class="box flat_text_area"></div>
-    </div>
-    <button id="add_textarea_button">増やす</button>
-    <hr>
     <h2>About this site</h2>
     <p>これはツイッター風テキストエリアに入力して文章を書くことができるエディタです。</p>
     <p><a href="http://twiren.sakura.ne.jp/" target="_blank">ツイ連エディタ</a>のアイデアに触発されて(というかアイデアを無断で拝借して)独自に機能を作っています。</p>
-    <h2>使い方</h2>
-    <ul>
-        <li>1つのテキストエリアには140字以内で入力を心掛ける(文字数はカウントしているが制限はない)</li>
-        <li>テキストを入力すると、右側の領域に入力内容が反映される（まとめてコピーできます）</li>
-        <li>Shift+Enterで現在フォーカスしてるテキストエリアの下に新しいテキストエリアが増える</li>
-        <li>増やすボタンを押すと一番下のテキストエリアの下に新しいテキストエリアが増える</li>
-    </ul>
 
-    <h2>作ろうと思ってる機能</h2>
-    <ul>
-        <li>データの保存(<a href="https://mlkcca.com/" target="_blank">Milkcocoa</a>を使って)</li>
-        <li>見栄えを良くする</li>
-    </ul>
+    <button type="button" onclick="location.href='./twiren_crone.html'">使ってみる</button>
 
     <h2>ソースコード</h2>
     <p><a href="https://github.com/hyakuson/twiren_crone" target="_blank">https://github.com/hyakuson/twiren_crone</a>
@@ -40,87 +44,7 @@
     <p><a href="https://twitter.com/hyakuson" target="_blank">@hyakuson</a>
     </p>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script>
-        $(window).load(function () {
 
-            // 最初は2つだけ表示しておく
-            appendTextareaLast();
-            appendParagraghLast();
-            appendTextareaLast();
-            appendParagraghLast();
-
-            $('#add_textarea_button').click(function () {
-                appendTextareaLast();
-                appendParagraghLast();
-            });
-
-            // キー入力時文字数をカウントする
-            $('#editor_area').on('keyup', '.textarea', function (e) {
-                countCharacters(e.target);
-
-                //同期
-                var index = $('div[name=twirens]').index($(e.target).parent());
-                $('#flat_text_area').children().eq(index).text($(e.target).val());
-            });
-
-            // Shift+Enterでカーソル位置より後ろのテキストを新しくつくるテキストエリアに入れる
-            $('#editor_area').on('keydown', '.textarea', function (e) {
-                if (event.shiftKey) {
-                    if (e.keyCode === 13) {
-
-                        /* editor_areaに新しいdivを追加 */
-                        var div = $('<div>')
-                            .attr('name', 'twirens');
-                        var textarea = $('<textarea>')
-                            .attr('name', 'textarea')
-                            .attr('class', 'textarea')
-                            .attr('placeholder', "140文字以内で入力。Ctrl+Enterでテキストエリアを増やす。")
-                            .appendTo(div);
-                        var sapn = $('<span>')
-                            .attr('class', 'char_count')
-                            .text('140')
-                            .appendTo(div);
-                        $(e.target).parent().after(div);
-                        //フォーカスを新しいテキストエリアに移す
-                        textarea.focus();
-
-                        /*flat_text_areaにparagraghを追加*/
-                        // 現在のテキストエリアの要素数を取得する
-                        var index = $('div[name=twirens]').index($(e.target).parent());
-                        var paragragh = document.createElement('p');
-                        $('#flat_text_area').children().eq(index).after(paragragh);
-
-                        return false; //Enterが実行されないようにfalseを返す
-                    }
-                }
-            });
-
-            function appendTextareaLast() {
-                var div = $('<div>')
-                    .attr('name', 'twirens');
-                var textarea = $('<textarea>')
-                    .attr('name', 'textarea')
-                    .attr('class', 'textarea')
-                    .attr('placeholder', "140文字以内で入力。Ctrl+Enterでテキストエリアを増やす。")
-                    .appendTo(div);
-                var sapn = $('<span>')
-                    .attr('class', 'char_count')
-                    .text('140')
-                    .appendTo(div);
-                $('#editor_area').append(div);
-            }
-
-            function appendParagraghLast() {
-                $('<p>').text("　").appendTo($('#flat_text_area'));
-            }
-
-            // テキストエリアの文字数のカウント
-            function countCharacters(textarea) {
-                $(textarea).next('span').text(140 - textarea.value.length);
-            }
-        });
-    </script>
 </body>
 
 </html>

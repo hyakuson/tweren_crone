@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>ツイ連エディタの独自クローン</title>
+</head>
+
+<body>
+    <h1>ツイ連エディタの独自クローン</h1>
+    <div class="main_area">
+        <div id="editor_area" class="box"></div>
+        <div id="flat_text_area" class="box flat_text_area"></div>
+    </div>
+    <button id="add_textarea_button">増やす</button>
+
+    <hr>
+
+    <h2>使い方</h2>
+    <ul>
+        <li>1つのテキストエリアには140字以内で入力を心掛ける(文字数はカウントしているが制限はない)</li>
+        <li>テキストを入力すると、右側の領域に入力内容が反映される（まとめてテキストとしてコピーできます）</li>
+        <li>Shift+Enterで現在フォーカスしてるテキストエリアの下に新しいテキストエリアが増える</li>
+        <li>増やすボタンを押すと一番下のテキストエリアの下に新しいテキストエリアが増える</li>
+    </ul>
+    <h2>今後作ろうと思ってる機能</h2>
+    <ul>
+        <li>データの保存(<a href="https://mlkcca.com/" target="_blank">Milkcocoa</a>を使って)</li>
+        <li>見栄えを良くする</li>
+    </ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(window).load(function () {
+
+            // 最初は2つ表示する
+            appendTextareaLast();
+            appendParagraghLast();
+            appendTextareaLast();
+            appendParagraghLast();
+
+            $('#add_textarea_button').click(function () {
+                appendTextareaLast();
+                appendParagraghLast();
+            });
+
+            // キー入力時文字数をカウントする
+            $('#editor_area').on('keyup', '.textarea', function (e) {
+                countCharacters(e.target);
+
+                //同期
+                var index = $('div[name=twirens]').index($(e.target).parent());
+                $('#flat_text_area').children().eq(index).text($(e.target).val());
+            });
+
+            // Shift+Enterでカーソル位置より後ろのテキストを新しくつくるテキストエリアに入れる
+            $('#editor_area').on('keydown', '.textarea', function (e) {
+                if (event.shiftKey) {
+                    if (e.keyCode === 13) {
+
+                        /* editor_areaに新しいdivを追加 */
+                        var div = $('<div>')
+                            .attr('name', 'twirens');
+                        var textarea = $('<textarea>')
+                            .attr('name', 'textarea')
+                            .attr('class', 'textarea')
+                            .attr('placeholder', "140文字以内で入力。Ctrl+Enterでテキストエリアを増やす。")
+                            .appendTo(div);
+                        var sapn = $('<span>')
+                            .attr('class', 'char_count')
+                            .text('140')
+                            .appendTo(div);
+                        $(e.target).parent().after(div);
+                        //フォーカスを新しいテキストエリアに移す
+                        textarea.focus();
+
+                        /*flat_text_areaにparagraghを追加*/
+                        // 現在のテキストエリアの要素数を取得する
+                        var index = $('div[name=twirens]').index($(e.target).parent());
+                        var paragragh = document.createElement('p');
+                        $('#flat_text_area').children().eq(index).after(paragragh);
+
+                        return false; //Enterが実行されないようにfalseを返す
+                    }
+                }
+            });
+
+            function appendTextareaLast() {
+                var div = $('<div>')
+                    .attr('name', 'twirens');
+                var textarea = $('<textarea>')
+                    .attr('name', 'textarea')
+                    .attr('class', 'textarea')
+                    .attr('placeholder', "140文字以内で入力。Ctrl+Enterでテキストエリアを増やす。")
+                    .appendTo(div);
+                var sapn = $('<span>')
+                    .attr('class', 'char_count')
+                    .text('140')
+                    .appendTo(div);
+                $('#editor_area').append(div);
+            }
+
+            function appendParagraghLast() {
+                $('<p>').text("　").appendTo($('#flat_text_area'));
+            }
+
+            // テキストエリアの文字数のカウント
+            function countCharacters(textarea) {
+                $(textarea).next('span').text(140 - textarea.value.length);
+            }
+        });
+    </script>
+</body>
+
+</html>
