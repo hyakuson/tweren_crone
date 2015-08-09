@@ -15,6 +15,10 @@ textarea {
     width: 45%;
 }
 
+.paragragh {
+    height: 3em;
+}
+
 .main_area {
     width: 100%;
     padding: 0px;

@@ -16,20 +16,14 @@
     <button id="add_textarea_button">増やす</button>
 
     <hr>
+    <div id="embeded_html"></div>
 
-    <h2>使い方</h2>
-    <ul>
-        <li>1つのテキストエリアには140字以内で入力を心掛ける(文字数はカウントしているが制限はない)</li>
-        <li>テキストを入力すると、右側の領域に入力内容が反映される（まとめてテキストとしてコピーできます）</li>
-        <li>Shift+Enterで現在フォーカスしてるテキストエリアの下に新しいテキストエリアが増える</li>
-        <li>増やすボタンを押すと一番下のテキストエリアの下に新しいテキストエリアが増える</li>
-    </ul>
-    <h2>今後作ろうと思ってる機能</h2>
-    <ul>
-        <li>データの保存(<a href="https://mlkcca.com/" target="_blank">Milkcocoa</a>を使って)</li>
-        <li>見栄えを良くする</li>
-    </ul>
+    <script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="documentList.js"></script>
+    <script>documentList.start("twiren_copy");</script>
+    <script src="accesscounter.js"></script>
+    <script>accesscounter.start("twiren_crone","twiren_crone");</script>
     <script>
         $(window).load(function () {
 
@@ -48,10 +42,19 @@
             $('#editor_area').on('keyup', '.textarea', function (e) {
                 countCharacters(e.target);
 
-                //同期
+                //右ペインと同期
                 var index = $('div[name=twirens]').index($(e.target).parent());
-                $('#flat_text_area').children().eq(index).text($(e.target).val());
+                //整形(改行を再現)
+                var formedText = formatText($(e.target).val());
+                //$('#flat_text_area').children().eq(index).text($(e.target).val());
+                $('#flat_text_area').children().eq(index).html(formedText);
             });
+            
+            // 入力文字列を整形する
+            function formatText(str) {
+                var ret = str.replace(/\n/g, '<br>');
+                return ret;
+            };
 
             // Shift+Enterでカーソル位置より後ろのテキストを新しくつくるテキストエリアに入れる
             $('#editor_area').on('keydown', '.textarea', function (e) {
@@ -78,6 +81,7 @@
                         // 現在のテキストエリアの要素数を取得する
                         var index = $('div[name=twirens]').index($(e.target).parent());
                         var paragragh = document.createElement('p');
+                        paragragh.setAttribute('class', 'paragragh');
                         $('#flat_text_area').children().eq(index).after(paragragh);
 
                         return false; //Enterが実行されないようにfalseを返す
@@ -101,7 +105,10 @@
             }
 
             function appendParagraghLast() {
-                $('<p>').text("　").appendTo($('#flat_text_area'));
+                $('<p>')
+                    .text("　")
+                    .attr('class', 'paragragh')
+                    .appendTo($('#flat_text_area'));
             }
 
             // テキストエリアの文字数のカウント
