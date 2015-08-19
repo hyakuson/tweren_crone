@@ -10,13 +10,15 @@ textarea {
 
 .box {
     display: inline-block;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
     vertical-align: top;
     width: 45%;
 }
 
-.paragragh {
-    height: 3em;
+.flat_text_area{
+    border-left: solid 1px #e0f5f5;
+    padding: 10px;
+    font: 16px Arial, Helvetica, sans-serif;
 }
 
 .main_area {
