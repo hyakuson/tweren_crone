@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Tweet Paragragh Writer(仮)</title>
+</head>
+
+<body>
+    <h1>Tweet Paragragh Writer(仮)</h1>
+    <div class="main_area">
+        <div id="editor_area" class="box">
+            <div name="editor_wrapper">
+                <textarea placeholder="140文字以内で入力。Ctrl+Enterでテキストエリアを挿入。"></textarea>
+                <span class="char_count">140</span>
+            </div>
+            <div name="editor_wrapper">
+                <textarea placeholder="140文字以内で入力。Ctrl+Enterでテキストエリアを挿入。"></textarea>
+                <span class="char_count">140</span>
+            </div>
+        </div>
+        <div style="background-color:gray; width:2px; height:300px;" class="box"></div>
+        <div id="flat_text_area" class="box flat_text_area">
+            <div name="flat_text_wrapper">
+                <p>&nbsp</p>
+            </div>
+            <div name="flat_text_wrapper">
+                <p>&nbsp</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="./lib/accesscounter.js"></script>
+    <script>
+        accesscounter.start("paragragh_editor", "editor");
+    </script>
+    <script src="editor.js"></script>
+    <script>
+        $(window).load(function () {
+
+            // 同期
+            $('#editor_area').on('keyup', 'textarea', sync);
+
+            // キー入力でテキストエリアを挿入
+            $('#editor_area').on('keydown', 'textarea', add);
+
+        });
+    </script>
+</body>
+
+</html>

@@ -16,7 +16,6 @@ textarea {
 }
 
 .flat_text_area{
-    border-left: solid 1px #e0f5f5;
     padding: 10px;
     font: 16px Arial, Helvetica, sans-serif;
 }
